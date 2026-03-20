@@ -41,6 +41,7 @@ git clone <repo-url> ~/.config/tmux/plugins/tmux-theme
 
 ```bash
 set -g @theme "everforest"
+set -g @theme_switch_key "T"
 run ~/.config/tmux/plugins/tmux-theme/theme.tmux
 ```
 
@@ -70,6 +71,16 @@ run ~/.config/tmux/plugins/tmux-theme/theme.tmux
 
 外部主题文件使用和内置主题相同的 `@thm_*` 变量格式，可以参考 [`themes/`](/Users/smoose/Documents/Code/mine/tmux-theme/themes) 目录中的文件。
 
+## 主题切换器
+
+按 `prefix + T` 就能调出内置主题切换菜单。
+
+```bash
+set -g @theme_switch_key "T"
+```
+
+如果你不想要这个快捷键，把它设为空字符串就行。
+
 ## 配置示例
 
 ```bash
@@ -77,6 +88,7 @@ set -g mouse on
 set -g default-terminal "tmux-256color"
 
 set -g @theme "catppuccin-frappe"
+set -g @theme_switch_key "T"
 set -g @theme_window_status_style "rounded"
 
 run ~/.config/tmux/plugins/tmux-theme/theme.tmux

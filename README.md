@@ -41,6 +41,7 @@ Add this to `~/.tmux.conf`:
 
 ```bash
 set -g @theme "everforest"
+set -g @theme_switch_key "T"
 run ~/.config/tmux/plugins/tmux-theme/theme.tmux
 ```
 
@@ -70,6 +71,16 @@ If `~/.config/tmux/theme/my-theme.conf` does not exist, the plugin tries the bui
 
 External theme files use the same `@thm_*` variables as the built-in files in [`themes/`](/Users/smoose/Documents/Code/mine/tmux-theme/themes).
 
+## Theme switcher
+
+Press `prefix + T` to open the built-in theme switcher menu.
+
+```bash
+set -g @theme_switch_key "T"
+```
+
+Set it to an empty string if you want to disable the binding.
+
 ## Example configuration
 
 ```bash
@@ -77,6 +88,7 @@ set -g mouse on
 set -g default-terminal "tmux-256color"
 
 set -g @theme "catppuccin-frappe"
+set -g @theme_switch_key "T"
 set -g @theme_window_status_style "rounded"
 
 run ~/.config/tmux/plugins/tmux-theme/theme.tmux

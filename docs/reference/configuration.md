@@ -5,6 +5,7 @@
 | Option | Effect |
 | --- | --- |
 | `@theme` | Selects the active theme. Built-ins include `catppuccin-latte`, `catppuccin-frappe`, `catppuccin-macchiato`, `catppuccin-mocha`, `bearded-arc`, `everforest`, `everforest_light`, `gruvchad`, `one_light`, `rosepine`, and `tundra`. |
+| `@theme_switch_key` | Prefix key used to open the theme switcher menu. Set it to `""` to disable the binding. |
 
 External themes live in `~/.config/tmux/theme/<name>.conf`. External files win over built-ins with the same name.
 
@@ -39,6 +40,7 @@ set -g @theme_window_right_separator ""
 
 ```bash
 set -g @theme "everforest"
+set -g @theme_switch_key "T"
 
 set -g @theme_menu_selected_style "fg=#{@thm_fg},bold,bg=#{@thm_overlay_0}"
 

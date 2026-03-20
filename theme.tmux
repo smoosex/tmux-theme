@@ -1,11 +1,27 @@
 #!/usr/bin/env bash
 
+set -Eeuo pipefail
+
 PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_THEME="everforest"
 
-tmux source "${PLUGIN_DIR}/theme_options_tmux.conf"
+tmux_cmd() {
+  if declare -F tmux >/dev/null && [[ -z "${TMUX_THEME_SOCKET_NAME:-}" ]]; then
+    tmux "$@"
+    return
+  fi
 
-theme_name="$(tmux show-options -gqv "@theme")"
+  if [[ -n "${TMUX_THEME_SOCKET_NAME:-}" ]]; then
+    command tmux -L "${TMUX_THEME_SOCKET_NAME}" -f /dev/null "$@"
+    return
+  fi
+
+  command tmux "$@"
+}
+
+tmux_cmd source-file "${PLUGIN_DIR}/theme_options_tmux.conf"
+
+theme_name="$(tmux_cmd show-options -gqv "@theme")"
 if [[ -z "${theme_name}" ]]; then
   theme_name="${DEFAULT_THEME}"
 fi
@@ -24,10 +40,22 @@ elif [[ -f "${builtin_theme}" ]]; then
 else
   resolved_theme="${DEFAULT_THEME}"
   resolved_file="${fallback_theme}"
-  tmux display-message "tmux-theme: theme '${theme_name}' not found, using '${DEFAULT_THEME}'"
+  tmux_cmd display-message "tmux-theme: theme '${theme_name}' not found, using '${DEFAULT_THEME}'"
 fi
 
-tmux set -gq "@_theme_name" "${resolved_theme}"
-tmux set -gq "@_theme_file" "${resolved_file}"
-tmux source "${resolved_file}"
-tmux source "${PLUGIN_DIR}/theme_tmux.conf"
+previous_switch_key="$(tmux_cmd show-options -gqv "@_theme_switch_key")"
+theme_switch_key="$(tmux_cmd show-options -gqv "@theme_switch_key")"
+
+if [[ -n "${previous_switch_key}" ]] && [[ "${previous_switch_key}" != "${theme_switch_key}" ]]; then
+  tmux_cmd unbind-key "${previous_switch_key}" 2>/dev/null || true
+fi
+
+if [[ -n "${theme_switch_key}" ]]; then
+  tmux_cmd bind-key "${theme_switch_key}" run-shell "\"${PLUGIN_DIR}/scripts/theme_menu.sh\" open"
+fi
+
+tmux_cmd set -gq "@_theme_switch_key" "${theme_switch_key}"
+tmux_cmd set -gq "@_theme_name" "${resolved_theme}"
+tmux_cmd set -gq "@_theme_file" "${resolved_file}"
+tmux_cmd source-file "${resolved_file}"
+tmux_cmd source-file "${PLUGIN_DIR}/theme_tmux.conf"

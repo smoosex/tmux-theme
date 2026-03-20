@@ -1,3 +1,4 @@
 @theme everforest
+@theme_switch_key T
 @theme_menu_selected_style fg=#{@thm_fg},bold,bg=#{@thm_overlay_0}
 @theme_pane_active_border_style ##{?pane_in_mode,fg=#{@thm_lavender},##{?pane_synchronized,fg=#{@thm_mauve},fg=#{@thm_lavender}}}
