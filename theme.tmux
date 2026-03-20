@@ -4,6 +4,7 @@ set -Eeuo pipefail
 
 PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_THEME="everforest"
+PERSISTED_THEME_FILE="${HOME}/.config/tmux/theme/current_theme.conf"
 
 tmux_cmd() {
   if declare -F tmux >/dev/null && [[ -z "${TMUX_THEME_SOCKET_NAME:-}" ]]; then
@@ -21,7 +22,15 @@ tmux_cmd() {
 
 tmux_cmd source-file "${PLUGIN_DIR}/theme_options_tmux.conf"
 
-theme_name="$(tmux_cmd show-options -gqv "@theme")"
+persisted_theme=""
+if [[ -f "${PERSISTED_THEME_FILE}" ]]; then
+  persisted_theme="$(sed -n '1p' "${PERSISTED_THEME_FILE}" | tr -d '\r')"
+fi
+
+theme_name="${persisted_theme}"
+if [[ -z "${theme_name}" ]]; then
+  theme_name="$(tmux_cmd show-options -gqv "@theme")"
+fi
 if [[ -z "${theme_name}" ]]; then
   theme_name="${DEFAULT_THEME}"
 fi

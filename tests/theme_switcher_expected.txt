@@ -1,9 +1,14 @@
 @theme_switch_key T
 bind-key    -T prefix T       run-shell "\"<plugin>/scripts/theme_menu.sh\" open"
 run-shell "<plugin>/scripts/theme_menu.sh switch rosepine"
+tmux-theme: switched to 'rosepine'
 everforest built-in
 one_light built-in
 rosepine local
+persisted-theme rosepine
 @theme rosepine
+@_theme_name rosepine
+@thm_bg #010203
+@theme everforest
 @_theme_name rosepine
 @thm_bg #010203

@@ -48,6 +48,12 @@ COLOR_KEYS = [
     "mantle",
     "crust",
 ]
+THEME_OVERRIDES = {
+    "bearded-arc": {
+        "red": "#ff5f7a",
+        "maroon": "#ff82a0",
+    },
+}
 
 
 def parse_lua_table(source: str, table_name: str) -> dict[str, str]:
@@ -227,6 +233,7 @@ def main() -> None:
         theme_type = base46_type or matheme_type
         merged_base16 = {**matheme_base16, **base16}
         palette = build_palette(base30, merged_base16, theme_type)
+        palette.update(THEME_OVERRIDES.get(theme_name, {}))
         output = render_theme(theme_name, palette)
         (OUTPUT_DIR / f"{theme_name}.conf").write_text(output)
 

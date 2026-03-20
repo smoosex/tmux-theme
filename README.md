@@ -80,6 +80,7 @@ set -g @theme_switch_key "T"
 ```
 
 Set it to an empty string if you want to disable the binding.
+The selected theme is persisted to `~/.config/tmux/theme/current_theme.conf`, so reloading tmux will keep the last theme you picked from the menu.
 
 ## Example configuration
 

@@ -19,8 +19,17 @@ source "${script_dir}/../theme.tmux"
 print_option @theme_switch_key
 tmux list-keys -T prefix | grep -F 'theme_menu.sh' | sed -E "s#${plugin_dir}#<plugin>#"
 HOME="${temp_home}" "${plugin_dir}/scripts/theme_menu.sh" command rosepine | sed -E "s#${plugin_dir}#<plugin>#"
+HOME="${temp_home}" "${plugin_dir}/scripts/theme_menu.sh" popup-text "tmux-theme: switched to 'rosepine'"
 TMUX_THEME_SOCKET_NAME="${SOCKET_NAME}" HOME="${temp_home}" "${plugin_dir}/scripts/theme_menu.sh" list | grep -E '^(everforest|one_light|rosepine)\t' | sed 's/\t/ /g'
 TMUX_THEME_SOCKET_NAME="${SOCKET_NAME}" HOME="${temp_home}" "${plugin_dir}/scripts/theme_menu.sh" switch rosepine
+printf "persisted-theme "
+sed -n '1p' "${temp_home}/.config/tmux/theme/current_theme.conf"
+print_option @theme
+print_option @_theme_name
+print_option @thm_bg
+
+tmux set -g @theme "everforest"
+source "${script_dir}/../theme.tmux"
 print_option @theme
 print_option @_theme_name
 print_option @thm_bg

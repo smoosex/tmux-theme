@@ -8,6 +8,7 @@
 | `@theme_switch_key` | Prefix key used to open the theme switcher menu. Set it to `""` to disable the binding. |
 
 External themes live in `~/.config/tmux/theme/<name>.conf`. External files win over built-ins with the same name.
+The theme switcher persists the last selected theme in `~/.config/tmux/theme/current_theme.conf`; that file is read before `@theme` on startup.
 
 ### Status line
 

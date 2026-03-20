@@ -5,6 +5,7 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 DEFAULT_THEME="everforest"
+PERSISTED_THEME_FILE="${HOME}/.config/tmux/theme/current_theme.conf"
 
 tmux_cmd() {
   if [[ -n "${TMUX_THEME_SOCKET_NAME:-}" ]]; then
@@ -54,13 +55,42 @@ list_themes() {
   theme_records
 }
 
+persist_theme() {
+  local theme_name persisted_dir
+
+  theme_name="${1:?missing theme name}"
+  persisted_dir="$(dirname "${PERSISTED_THEME_FILE}")"
+  mkdir -p "${persisted_dir}"
+  printf '%s\n' "${theme_name}" > "${PERSISTED_THEME_FILE}"
+}
+
+popup_text() {
+  local message
+
+  message="${1:?missing message}"
+  printf '%s\n' "${message}"
+}
+
+show_popup() {
+  local message
+
+  message="${1:?missing message}"
+  if [[ -z "$(tmux_cmd list-clients 2>/dev/null)" ]]; then
+    return
+  fi
+  tmux_cmd display-popup -E -w 44 -h 3 -x C -y C -T "tmux-theme" \
+    -e "TMUX_THEME_POPUP_MESSAGE=${message}" \
+    sh -c 'printf "%s\n" "$TMUX_THEME_POPUP_MESSAGE"; sleep 1'
+}
+
 switch_theme() {
   local theme_name
 
   theme_name="${1:?missing theme name}"
+  persist_theme "${theme_name}"
   tmux_cmd set -gq @theme "${theme_name}"
   TMUX_THEME_SOCKET_NAME="${TMUX_THEME_SOCKET_NAME:-}" "${PLUGIN_DIR}/theme.tmux"
-  tmux_cmd display-message "tmux-theme: switched to '${theme_name}'"
+  show_popup "$(popup_text "tmux-theme: switched to '${theme_name}'")"
 }
 
 menu_command() {
@@ -90,7 +120,7 @@ open_menu() {
   done < <(theme_records)
 
   if [[ "${#menu_args[@]}" -eq 0 ]]; then
-    tmux_cmd display-message "tmux-theme: no themes found"
+    show_popup "$(popup_text "tmux-theme: no themes found")"
     return
   fi
 
@@ -114,6 +144,12 @@ main() {
       ;;
     command)
       menu_command "${2:-}"
+      ;;
+    popup-text)
+      popup_text "${2:-}"
+      ;;
+    persist)
+      persist_theme "${2:-}"
       ;;
     *)
       printf "Unknown action: %s\n" "${action}" >&2

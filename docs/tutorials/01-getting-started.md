@@ -19,6 +19,7 @@ run ~/.config/tmux/plugins/tmux-theme/theme.tmux
 Restart tmux or run `tmux source ~/.tmux.conf`.
 
 Press `prefix + T` to open the theme switcher menu. Set `@theme_switch_key` to `""` if you want to disable it.
+The menu stores the last selected theme in `~/.config/tmux/theme/current_theme.conf`, so reloading tmux keeps your choice.
 
 ## 3. Pick a different built-in theme
 

@@ -80,6 +80,7 @@ set -g @theme_switch_key "T"
 ```
 
 如果你不想要这个快捷键，把它设为空字符串就行。
+通过菜单切换后的主题会持久化到 `~/.config/tmux/theme/current_theme.conf`，所以 reload tmux 配置后不会又傻乎乎跳回默认主题。
 
 ## 配置示例
 
