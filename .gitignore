@@ -1,3 +1,5 @@
 custom
 !custom/README.md
 !custom/example.sh
+.DS_Store
+scripts/

@@ -1,1 +1,1 @@
-@catppuccin_status_application #[fg=#eba0ac]#[fg=#11111b,bg=#eba0ac] #[fg=#cdd6f4,bg=#313244]#{E:@catppuccin_application_text}#[fg=#313244]
+@theme_status_application #[fg=#ce8196]#[fg=#272f35,bg=#ce8196] #[fg=#d3c6aa,bg=#363e44]#{E:@theme_application_text}#[fg=#363e44]

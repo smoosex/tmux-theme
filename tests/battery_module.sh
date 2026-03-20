@@ -4,8 +4,6 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 # shellcheck disable=SC1091
 source "${script_dir}/helpers.sh"
 
-# Tests that the default options are set correctly
-tmux source "${script_dir}/../catppuccin_options_tmux.conf"
-tmux source "${script_dir}/../catppuccin_tmux.conf"
+source "${script_dir}/../theme.tmux"
 
-print_option @catppuccin_status_battery
+print_option @theme_status_battery

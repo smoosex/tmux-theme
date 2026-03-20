@@ -1,3 +1,2 @@
 
-E:@catppuccin_status_load #[fg=#89b4fa]#[fg=#11111b,bg=#89b4fa]󰊚 #[fg=#cdd6f4,bg=#313244]#(uptime | awk '{split(substr($0, index($0, "load")), a, ":"); print a[2]}')#[fg=#313244]
-
+E:@theme_status_load #[fg=#7393b3]#[fg=#272f35,bg=#7393b3]󰊚 #[fg=#d3c6aa,bg=#363e44]#(uptime | awk '{split(substr($0, index($0, "load")), a, ":"); print a[2]}')#[fg=#363e44]

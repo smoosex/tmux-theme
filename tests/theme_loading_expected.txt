@@ -1,0 +1,7 @@
+@_theme_name rosepine
+@thm_bg #010203
+@_theme_name one_light
+@thm_bg #fafafa
+@thm_fg #383a42
+@_theme_name everforest
+@thm_bg #2b3339

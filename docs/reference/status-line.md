@@ -1,187 +1,84 @@
-## Using the theme's built-in status modules
+## Built-in Status Modules
 
-To use the theme's built in status modules, set the `status-left` and
-`status-right` tmux options _after_ the plugin has been loaded with `run`.
-
-The tmux status line modules are set as variables and prefixed with `@catppuccin_status_<module>`.
-
-To use the `application` and `session` modules on the right and have nothing on
-the left:
+The plugin exposes status segments as tmux options named `@theme_status_<module>`.
 
 ```sh
-set -g status-right-length 100
-
-set -g status-right "#{E:@catppuccin_status_application}#{E:@catppuccin_status_session}"
 set -g status-left ""
+set -g status-right "#{E:@theme_status_application}#{E:@theme_status_session}"
 ```
 
-## Customizing modules
-
-Every module supports the following overrides:
-
-### Override the specific module icon
+## Per-module overrides
 
 ```sh
-set -g @catppuccin_[module_name]_icon "icon"
+set -g @theme_[module_name]_icon "icon"
+set -g @theme_[module_name]_color "color"
+set -g @theme_[module_name]_text "text"
+set -g @theme_status_[module_name]_text_bg "#{@thm_surface_0}"
+set -g @theme_status_[module_name]_text_fg "#{@thm_fg}"
 ```
 
-### Override the specific module color
+To remove a value, set it to an empty string:
 
 ```sh
-set -g @catppuccin_[module_name]_color "color"
+set -g @theme_date_time_icon ""
 ```
 
-### Override the specific module text
+## Load order
 
-```sh
-set -g @catppuccin_[module_name]_text "text"
-```
-
-### Override the specific module's background color
-
-```sh
-set -g @catppuccin_status_[module_name]_bg_color "#{@thm_surface_0}"
-```
-
-### Removing a specific module option
-
-```sh
-set -g @catppuccin_[module_name]_[option] ""
-```
-
-This is for the situation where you want to remove the icon from a module.
-For example:
-
-```sh
-set -g @catppuccin_date_time_icon ""
-```
-
-### Notes for TPM users
-
-Make sure you load the catppuccin theme prior to setting the status-left and/or
-status-* options. This ensures the catppuccin options (such as colors and
-status modules) are defined so they can then be used.
-
-After status-left and/or status-right have been set, make sure to run TPM to load
-the modules. This runs any plugins that may replace text in the status line.
+Load `theme.tmux` before composing `status-left` or `status-right`.
 
 ```bash
-# load catppuccin theme ...
-run '~/.config/tmux/plugins/tmux/catppuccin.tmux' # or where this file is located on your machine
+run '~/.config/tmux/plugins/tmux-theme/theme.tmux'
 
-# ... and then set status-left & status-right ...
-set -g status-left "#{E:@catppuccin_status_session}"
-
-set -g status-right "#{E:@catppuccin_status_[module_name]}"
-set -ag status-right "#{E:@catppuccin_status_[module_name]}"
-set -agF status-right "#{E:@catppuccin_status_[module_name]}"
-
-# ... and finally start TPM
-set -g @plugin 'tmux-plugins/tpm'
-run '~/.tmux/plugins/tpm/tpm'
+set -g status-left "#{E:@theme_status_session}"
+set -g status-right "#{E:@theme_status_cpu}"
 ```
 
-## Battery module
+## Module examples
 
-**Requirements:** This module depends on [tmux-battery](https://github.com/tmux-plugins/tmux-battery/tree/master).
-
-**Install:** The preferred way to install tmux-battery is using [TPM](https://github.com/tmux-plugins/tpm).
-
-**Configure:**
+### Battery
 
 ```sh
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-
-set -agF status-right "#{E:@catppuccin_status_battery}"
-
-set -g @plugin 'tmux-plugins/tmux-battery'
-run '~/.tmux/plugins/tpm/tpm'
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+set -agF status-right "#{E:@theme_status_battery}"
 ```
 
-## CPU module
-
-**Requirements:** This module depends on [tmux-cpu](https://github.com/tmux-plugins/tmux-cpu/tree/master).
-
-**Install:** The preferred way to install tmux-cpu is using [TPM](https://github.com/tmux-plugins/tpm).
-
-**Configure:**
+### CPU
 
 ```sh
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-
-set -agF status-right "#{E:@catppuccin_status_cpu}"
-
-set -g @plugin 'tmux-plugins/tmux-cpu'
-run '~/.tmux/plugins/tpm/tpm'
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+set -agF status-right "#{E:@theme_status_cpu}"
 ```
 
-## Weather modules
-
-### tmux-weather
-
-**Requirements:** This module depends on [tmux-weather](https://github.com/xamut/tmux-weather).
-
-**Install:** The preferred way to install tmux-weather is using [TPM](https://github.com/tmux-plugins/tpm).
-
-**Configure:**
+### Weather
 
 ```sh
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-
-set -agF status-right "#{E:@catppuccin_status_weather}"
-
-set -g @plugin 'xamut/tmux-weather'
-run '~/.tmux/plugins/tpm/tpm'
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+set -agF status-right "#{E:@theme_status_weather}"
 ```
 
-### tmux-clima
-
-**Requirements:** This module depends on [tmux-clima](https://github.com/vascomfnunes/tmux-clima).
-
-**Install:** The preferred way to install tmux-clima is using [TPM](https://github.com/tmux-plugins/tpm).
-
-**Configure:**
+### Clima
 
 ```sh
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-
-set -agF status-right "#{E:@catppuccin_status_clima}"
-
-set -g @plugin 'vascomfnunes/tmux-clima'
-run '~/.tmux/plugins/tpm/tpm'
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+set -agF status-right "#{E:@theme_status_clima}"
 ```
 
-## Load module
-
-**Configure:**
+### Load
 
 ```sh
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-
-set -agF status-right "#{E:@catppuccin_status_load}"
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+set -agF status-right "#{E:@theme_status_load}"
 ```
 
-## Gitmux module
-
-**Requirements:** This module depends on [gitmux](https://github.com/arl/gitmux).
-
-**Install:** To install gitmux, follow the instructions in the [gitmux documentation](https://github.com/arl/gitmux/blob/main/README.md#installing).
-
-**Configure:**
-
-Add the gitmux module to the status modules list.
+### Gitmux
 
 ```sh
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-
-set -agF status-right "#{@catppuccin_status_gitmux}"
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+set -agF status-right "#{@theme_status_gitmux}"
 ```
 
-Follow the instructions in the [gitmux documentation](https://github.com/arl/gitmux/blob/main/README.md#customizing)
-to create a gitmux config file. The gitmux plugin expects a file to be present
-at `~/.gitmux.conf`.
-
-Add the following to your `~/.gitmux.conf` so that it uses catppuccin colors:
+Sample `~/.gitmux.conf` colors:
 
 ```yaml
 tmux:
@@ -201,39 +98,19 @@ tmux:
     deletions: "#[fg=#{@thm_red}]"
 ```
 
-## Pomodoro module
-
-**Requirements:**: This module depends on [tmux-pomodoro-plus](https://github.com/olimorris/tmux-pomodoro-plus/tree/main).
-
-**Install:**: The preferred way to install tmux-pomodoro-plus is using [TPM](https://github.com/tmux-plugins/tpm).
-
-**Configure:**
+### Pomodoro Plus
 
 ```sh
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-
-set -agF status-right "#{E:@catppuccin_status_pomodoro_plus}"
-
-set -g @plugin 'olimorris/tmux-pomodoro-plus'
-run '~/.tmux/plugins/tpm/tpm'
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+set -agF status-right "#{E:@theme_status_pomodoro_plus}"
 ```
 
-## Kube module
-
-**Requirements:** This module depends on [tmux-kubectx](https://github.com/tony-sol/tmux-kubectx).
-
-**Install:** The preferred way to install tmux-kubectx is using [TPM](https://github.com/tmux-plugins/tpm).
-
-**Configure:**
+### Kube
 
 ```sh
-set -g @catppuccin_kube_context_color "#{@thm_red}"
-set -g @catppuccin_kube_namespace_color "#{@thm_sky}"
+set -g @theme_kube_context_color "#{@thm_red}"
+set -g @theme_kube_namespace_color "#{@thm_sky}"
 
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-
-set -agF status-right "#{E:@catppuccin_status_kube}"
-
-set -g @plugin 'tony-sol/tmux-kubectx'
-run '~/.tmux/plugins/tpm/tpm'
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+set -agF status-right "#{E:@theme_status_kube}"
 ```

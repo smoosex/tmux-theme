@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # Returns the value of given tmux option.
-# First argument is the option name, e.g. @catppuccin_flavor.
+# First argument is the option name, e.g. @theme.
 #
-# Usage: `get_option @catppuccin_flavor`
-# Would return: `mocha`
+# Usage: `get_option @theme`
+# Would return: `everforest`
 #
 # The option is given as a format string.
 get_option() {
@@ -15,10 +15,10 @@ get_option() {
 }
 
 # Prints the given tmux option to stdout.
-# First argument is the option name, e.g. @catppuccin_flavor.
+# First argument is the option name, e.g. @theme.
 #
-# Usage: `print_option @catppuccin_flavor`
-# Would print: `@catppuccin_flavor mocha`
+# Usage: `print_option @theme`
+# Would print: `@theme everforest`
 #
 # The option is given as a format string.
 print_option() {

@@ -1,199 +1,107 @@
-<!-- markdownlint-disable -->
-<h3 align="center">
- <img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/logos/exports/1544x1544_circle.png" width="100" alt="Logo"/><br/>
- <img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/misc/transparent.png" height="30" width="0px"/>
- Catppuccin for <a href="https://github.com/tmux/tmux">Tmux</a>
- <img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/misc/transparent.png" height="30" width="0px"/>
-</h3>
+# tmux-theme
+
+A general-purpose tmux theme plugin with built-in palettes and support for local custom themes.
 
 <p align="center">
-    <a href="https://github.com/catppuccin/tmux/stargazers"><img src="https://img.shields.io/github/stars/catppuccin/tmux?colorA=363a4f&colorB=b7bdf8&style=for-the-badge"></a>
-    <a href="https://github.com/catppuccin/tmux/issues"><img src="https://img.shields.io/github/issues/catppuccin/tmux?colorA=363a4f&colorB=f5a97f&style=for-the-badge"></a>
-    <a href="https://github.com/catppuccin/tmux/contributors"><img src="https://img.shields.io/github/contributors/catppuccin/tmux?colorA=363a4f&colorB=a6da95&style=for-the-badge"></a>
+  <img src="./assets/tmux-theme-demo.png" alt="tmux-theme demo"/>
 </p>
 
 <p align="center">
-  <img src="./assets/preview.webp"/>
+  Demo configuration reference: <a href="https://github.com/smoosex/dotfiles">smoosex/dotfiles</a>
 </p>
-<!-- markdownlint-enable -->
 
-## Themes
+## Built-in themes
 
-<details>
-<summary>🌻 Latte</summary>
+- `catppuccin-latte`
+- `catppuccin-frappe`
+- `catppuccin-macchiato`
+- `catppuccin-mocha`
+- `bearded-arc`
+- `everforest`
+- `everforest_light`
+- `gruvchad`
+- `one_light`
+- `rosepine`
+- `tundra`
 
-![Latte Flavor Preview](./assets/latte.webp)
-
-</details>
-<details>
-<summary>🪴 Frappé</summary>
-
-![Frappe Flavor Preview](./assets/frappe.webp)
-
-</details>
-<details>
-<summary>🌺 Macchiato</summary>
-
-![Macchiato Flavor Preview](./assets/macchiato.webp)
-
-</details>
-<details>
-<summary>🌿 Mocha</summary>
-
-![Mocha Flavor Preview](./assets/mocha.webp)
-
-</details>
+The default theme is `everforest`.
 
 ## Installation
 
-In order to have the icons displayed correctly please use/update your favorite
-[nerd font](https://www.nerdfonts.com/font-downloads).
-If you do not have a patched font installed, you can override or remove any
-icon. Check the [documentation](./docs/reference/configuration.md) on the
-options available.
+Use a Nerd Font if you want the default icons to render correctly.
 
-### Manual (Recommended)
+### Manual
 
-This method is recommended as TPM has some issues with name conflicts.
+```bash
+mkdir -p ~/.config/tmux/plugins/tmux-theme
+git clone <repo-url> ~/.config/tmux/plugins/tmux-theme
+```
 
-<!-- x-release-please-start-version -->
+Add this to `~/.tmux.conf`:
 
-1. Clone this repository to your desired location (e.g.
-   `~/.config/tmux/plugins/catppuccin`).
-
-   ```bash
-   mkdir -p ~/.config/tmux/plugins/catppuccin
-   git clone -b v2.1.3 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
-   ```
-
-1. Add the following line to your `tmux.conf` file:
-   `run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux`.
-1. Reload Tmux by either restarting or reloading with `tmux source ~/.tmux.conf`.
-<!-- x-release-please-end -->
-
-Check out what to do next in the "[Getting Started Guide](./docs/tutorials/01-getting-started.md)".
+```bash
+set -g @theme "everforest"
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+```
 
 ### TPM
 
-<!-- x-release-please-start-version -->
+```bash
+set -g @plugin '<your-user>/tmux-theme'
+set -g @plugin 'tmux-plugins/tpm'
 
-1.  Install [TPM](https://github.com/tmux-plugins/tpm)
-1.  Add the Catppuccin plugin:
+set -g @theme "rosepine"
 
-    ```bash
-    set -g @plugin 'catppuccin/tmux#v2.1.3' # See https://github.com/catppuccin/tmux/tags for additional tags
-    # ...alongside
-    set -g @plugin 'tmux-plugins/tpm'
-    ```
-
-1.  (Optional) Set your preferred flavor, it defaults to `"mocha"`:
-
-    ```bash
-    set -g @catppuccin_flavor 'mocha' # latte, frappe, macchiato or mocha
-    ```
-
-    <!-- x-release-please-end -->
-
-> [!IMPORTANT]
-> You may have to run `~/.config/tmux/plugins/tpm/bin/clean_plugins`
-> if upgrading from an earlier version
-> (especially from `v0.3.0`).
-
-### For TMUX versions prior to 3.2
-
-This plugin uses features that were only introduced into tmux in version 3.2.
-If you are using a version earlier than this, you can still have lovely
-catppuccin colors, the installation method just looks a little different.
-
-```sh
-# In your ~/.tmux.conf
-
-# Add the colors from the pallete. Check the themes/ directory for all options.
-
-# Some basic mocha colors.
-set -g @ctp_bg "#24273a"
-set -g @ctp_surface_1 "#494d64"
-set -g @ctp_fg "#cad3f5"
-set -g @ctp_mauve "#c6a0f6"
-set -g @ctp_crust "#181926"
-
-# status line
-set -gF status-style "bg=#{@ctp_bg},fg=#{@ctp_fg}"
-
-# windows
-set -gF window-status-format "#[bg=#{@ctp_surface_1},fg=#{@ctp_fg}] ##I ##T "
-set -gF window-status-current-format "#[bg=#{@ctp_mauve},fg=#{@ctp_crust}] ##I ##T "
+run '~/.tmux/plugins/tpm/tpm'
 ```
 
-### Upgrading from v0.3
+## External themes
 
-Breaking changes have been introduced since 0.3, to understand how to migrate
-your configuration, see pinned issue [#487](https://github.com/catppuccin/tmux/issues/487).
+The plugin checks `~/.config/tmux/theme/<name>.conf` before built-in themes.
 
-## Recommended Default Configuration
-
-This configuration shows some customisation options, that can be further
-extended as desired.
-This is what is used for the previews above.
-
-![Example configuration](./assets/mocha.webp)
+Example:
 
 ```bash
-# ~/.tmux.conf
+set -g @theme "my-theme"
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
+```
 
-# Options to make tmux more pleasant
+If `~/.config/tmux/theme/my-theme.conf` does not exist, the plugin tries the built-in theme with the same name and finally falls back to `everforest`.
+
+External theme files use the same `@thm_*` variables as the built-in files in [`themes/`](/Users/smoose/Documents/Code/mine/tmux-theme/themes).
+
+## Example configuration
+
+```bash
 set -g mouse on
 set -g default-terminal "tmux-256color"
 
-# Configure the catppuccin plugin
-set -g @catppuccin_flavor "mocha"
-set -g @catppuccin_window_status_style "rounded"
+set -g @theme "catppuccin-frappe"
+set -g @theme_window_status_style "rounded"
 
-# Load catppuccin
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
-# For TPM, instead use `run ~/.tmux/plugins/tmux/catppuccin.tmux`
+run ~/.config/tmux/plugins/tmux-theme/theme.tmux
 
-# Make the status line pretty and add some modules
-set -g status-right-length 100
-set -g status-left-length 100
 set -g status-left ""
-set -g status-right "#{E:@catppuccin_status_application}"
-set -agF status-right "#{E:@catppuccin_status_cpu}"
-set -ag status-right "#{E:@catppuccin_status_session}"
-set -ag status-right "#{E:@catppuccin_status_uptime}"
-set -agF status-right "#{E:@catppuccin_status_battery}"
-
-run ~/.config/tmux/plugins/tmux-plugins/tmux-cpu/cpu.tmux
-run ~/.config/tmux/plugins/tmux-plugins/tmux-battery/battery.tmux
-# Or, if using TPM, just run TPM
+set -g status-right "#{E:@theme_status_application}"
+set -agF status-right "#{E:@theme_status_cpu}"
+set -ag status-right "#{E:@theme_status_session}"
+set -ag status-right "#{E:@theme_status_uptime}"
+set -agF status-right "#{E:@theme_status_battery}"
 ```
+
+## Theme generation
+
+The repository ships with [`scripts/generate_themes.py`](/Users/smoose/Documents/Code/mine/tmux-theme/scripts/generate_themes.py) for development-time imports.
+
+- Theme names and fallback `base16`: `/Users/smoose/Documents/Code/mine/matheme/themes`
+- Richer palette source: `/Users/smoose/.local/share/nvim/lazy/base46/lua/base46/themes`
+
+It generates the repository's own `themes/*.conf` files. These source directories are not required at runtime.
 
 ## Documentation
 
-### Guides
-
 - [Getting Started](./docs/tutorials/01-getting-started.md)
-- [Custom Status Line Segments](./docs/tutorials/02-custom-status.md)
+- [Custom Status Modules](./docs/tutorials/02-custom-status.md)
 - [Troubleshooting](./docs/guides/troubleshooting.md)
-
-### Reference
-
-- [Status Line](./docs/reference/status-line.md)
-- [Configuration Options Reference](./docs/reference/configuration.md)
-- [Tmux Configuration Showcase](https://github.com/catppuccin/tmux/discussions/317)
-
-## 💝 Thanks to
-
-- [Pocco81](https://github.com/Pocco81)
-- [vinnyA3](https://github.com/vinnyA3)
-- [rogeruiz](https://github.com/rogeruiz)
-- [kales](https://github.com/kjnsn)
-
-&nbsp;
-
-<!-- markdownlint-disable -->
-<p align="center">
-<img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/footers/gray0_ctp_on_line.svg?sanitize=true" /></p>
-<p align="center">Copyright &copy; 2021-present <a href="https://github.com/catppuccin" target="_blank">Catppuccin Org</a>
-<p align="center"><a href="https://github.com/catppuccin/catppuccin/blob/main/LICENSE"><img src="https://img.shields.io/static/v1.svg?style=for-the-badge&label=License&message=MIT&logoColor=d9e0ee&colorA=363a4f&colorB=b7bdf8"/></a></p>
-<!-- markdownlint-enable -->
+- [Configuration Reference](./docs/reference/configuration.md)
+- [Status Line Reference](./docs/reference/status-line.md)

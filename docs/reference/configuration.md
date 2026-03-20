@@ -1,116 +1,83 @@
 ## Configuration Reference
 
-<img src="../../assets/structure.svg" style="background: #eff1f5" />
+### Top-level option
 
-This is a diagram of how the theme is split between its components.
+| Option | Effect |
+| --- | --- |
+| `@theme` | Selects the active theme. Built-ins include `catppuccin-latte`, `catppuccin-frappe`, `catppuccin-macchiato`, `catppuccin-mocha`, `bearded-arc`, `everforest`, `everforest_light`, `gruvchad`, `one_light`, `rosepine`, and `tundra`. |
 
-### Top Level Options
+External themes live in `~/.config/tmux/theme/<name>.conf`. External files win over built-ins with the same name.
 
-| Option               | Effect                                                                         |
-| -------------------- | ------------------------------------------------------------------------------ |
-| `@catppuccin_flavor` | Sets the catppuccin flavor, one of "latte", "frappe", "macchiato", or "mocha". |
+### Status line
 
-### Status Line
+| Option | Effect |
+| --- | --- |
+| `@theme_status_background` | Background for the status line. |
 
-| Option                        | Effect                                        |
-| ----------------------------- | --------------------------------------------- |
-| @catppuccin_status_background | Sets the background color of the status line. |
+- `default` uses the active theme background
+- `none` makes the bar transparent
+- any other value can be a hex color or a tmux format such as `#{@thm_surface_0}`
 
-- `default` will use the color from the selected theme
-- `none` will make the status bar transparent
-- use hex color codes for other colors or a theme color (`#{@thm_<color>}`)
+### Window style
 
-### Window
-
-The plugin comes with three window styles built in, these can be customized by
-setting the `@catppuccin_window_status_style` option. The default is `basic`.
-
-| Option    | Effect                                                                   | Preview                                                |
-| --------- | ------------------------------------------------------------------------ | ------------------------------------------------------ |
-| `basic`   | Simple styling with blocks.                                              | ![window basic](../../assets/window-basic.webp)           |
-| `rounded` | Each window is separated with rounded separators.                        | ![window rounded style](../../assets/window-rounded.webp) |
-| `slanted` | Each window is separated with slanted separators.                        | ![window slanted style](../../assets/window-slanted.webp) |
-| `custom`  | Custom separators are used. This is required to override the separators! |                                                        |
-| `none`    | Styling of the window status is completely disabled.                     | ![window no styling](../../assets/window-none.webp)       |
-
-If you want to change the active color to something else (the default is mauve),
-use the following. For example to use lavender:
+| Option | Effect |
+| --- | --- |
+| `basic` | Simple blocks |
+| `rounded` | Rounded separators |
+| `slanted` | Slanted separators |
+| `custom` | Use your own separators |
+| `none` | Disable the plugin's window styling |
 
 ```bash
-set -g @catppuccin_window_current_number_color "#{@thm_lavender}"
+set -g @theme_window_status_style "custom"
+set -g @theme_window_left_separator ""
+set -g @theme_window_middle_separator ""
+set -g @theme_window_right_separator ""
 ```
 
-<details>
-
-<summary>Customising the separators</summary>
-
-Add the following,
-setting whatever values you'd like for the separators:
+### Defaults
 
 ```bash
-set -g @catppuccin_window_status_style "custom"
-set -g @catppuccin_window_left_separator ""
-set -g @catppuccin_window_middle_separator ""
-set -g @catppuccin_window_right_separator ""
-```
+set -g @theme "everforest"
 
-</details>
+set -g @theme_menu_selected_style "fg=#{@thm_fg},bold,bg=#{@thm_overlay_0}"
 
-### Menu
+set -g @theme_pane_status_enabled "no"
+set -g @theme_pane_border_status "off"
+set -g @theme_pane_border_style "fg=#{@thm_overlay_0}"
+set -g @theme_pane_active_border_style "##{?pane_in_mode,fg=#{@thm_lavender},##{?pane_synchronized,fg=#{@thm_mauve},fg=#{@thm_lavender}}}"
+set -g @theme_pane_left_separator "█"
+set -g @theme_pane_middle_separator "█"
+set -g @theme_pane_right_separator "█"
+set -g @theme_pane_color "#{@thm_green}"
+set -g @theme_pane_background_color "#{@thm_surface_0}"
+set -g @theme_pane_default_text "##{b:pane_current_path}"
+set -g @theme_pane_default_fill "number"
+set -g @theme_pane_number_position "left"
 
-**Set the menu selected style:**
+set -g @theme_window_status_style "basic"
+set -g @theme_window_text_color "#{@thm_surface_0}"
+set -g @theme_window_number_color "#{@thm_overlay_2}"
+set -g @theme_window_text " #T"
+set -g @theme_window_number "#I"
+set -g @theme_window_current_text_color "#{@thm_surface_1}"
+set -g @theme_window_current_number_color "#{@thm_mauve}"
+set -g @theme_window_current_text " #T"
+set -g @theme_window_current_number "#I"
+set -g @theme_window_number_position "left"
+set -g @theme_window_flags "none"
+set -g @theme_window_flags_icon_last " 󰖰"
+set -g @theme_window_flags_icon_current " 󰖯"
+set -g @theme_window_flags_icon_zoom " 󰁌"
+set -g @theme_window_flags_icon_mark " 󰃀"
+set -g @theme_window_flags_icon_silent " 󰂛"
+set -g @theme_window_flags_icon_activity " 󱅫"
+set -g @theme_window_flags_icon_bell " 󰂞"
+set -g @theme_window_flags_icon_format "##{?window_activity_flag,#{E:@theme_window_flags_icon_activity},}##{?window_bell_flag,#{E:@theme_window_flags_icon_bell},}##{?window_silence_flag,#{E:@theme_window_flags_icon_silent},}##{?window_active,#{E:@theme_window_flags_icon_current},}##{?window_last_flag,#{E:@theme_window_flags_icon_last},}##{?window_marked_flag,#{E:@theme_window_flags_icon_mark},}##{?window_zoomed_flag,#{E:@theme_window_flags_icon_zoom},} "
 
-```sh
-# Use a value compatible with the standard tmux `menu-selected-style`
-set -g @catppuccin_menu_selected_style "fg=#{@thm_surface_0},bg=#{@thm_yellow}"
-```
-
-### All options and their defaults
-
-```bash
-# Menu styling options
-set -g @catppuccin_menu_selected_style "fg=#{@thm_fg},bold,bg=#{@thm_overlay_0}"
-
-# Pane styling options
-set -g @catppuccin_pane_status_enabled "no" # set to "yes" to enable
-set -g @catppuccin_pane_border_status "off" # set to "yes" to enable
-set -g @catppuccin_pane_border_style "fg=#{@thm_overlay_0}"
-set -g @catppuccin_pane_active_border_style "##{?pane_in_mode,fg=#{@thm_lavender},##{?pane_synchronized,fg=#{@thm_mauve},fg=#{@thm_lavender}}}"
-set -g @catppuccin_pane_left_separator "█"
-set -g @catppuccin_pane_middle_separator "█"
-set -g @catppuccin_pane_right_separator "█"
-set -g @catppuccin_pane_color "#{@thm_green}"
-set -g @catppuccin_pane_background_color "#{@thm_surface_0}"
-set -g @catppuccin_pane_default_text "##{b:pane_current_path}"
-set -g @catppuccin_pane_default_fill "number"
-set -g @catppuccin_pane_number_position "left" # right, left
-
-set -g @catppuccin_window_status_style "basic" # basic, rounded, slanted, custom, or none
-set -g @catppuccin_window_text_color "#{@thm_surface_0}"
-set -g @catppuccin_window_number_color "#{@thm_overlay_2}"
-set -g @catppuccin_window_text " #T"
-set -g @catppuccin_window_number "#I"
-set -g @catppuccin_window_current_text_color "#{@thm_surface_1}"
-set -g @catppuccin_window_current_number_color "#{@thm_mauve}"
-set -g @catppuccin_window_current_text " #T"
-set -g @catppuccin_window_current_number "#I"
-set -g @catppuccin_window_number_position "left"
-set -g @catppuccin_window_flags "none" # none, icon, or text
-set -g @catppuccin_window_flags_icon_last " 󰖰" # -
-set -g @catppuccin_window_flags_icon_current " 󰖯" # *
-set -g @catppuccin_window_flags_icon_zoom " 󰁌" # Z
-set -g @catppuccin_window_flags_icon_mark " 󰃀" # M
-set -g @catppuccin_window_flags_icon_silent " 󰂛" # ~
-set -g @catppuccin_window_flags_icon_activity " 󱅫" # #
-set -g @catppuccin_window_flags_icon_bell " 󰂞" # !
-# Matches icon order when using `#F` (`#!~[*-]MZ`)
-set -g @catppuccin_window_flags_icon_format "##{?window_activity_flag,#{E:@catppuccin_window_flags_icon_activity},}##{?window_bell_flag,#{E:@catppuccin_window_flags_icon_bell},}##{?window_silence_flag,#{E:@catppuccin_window_flags_icon_silent},}##{?window_active,#{E:@catppuccin_window_flags_icon_current},}##{?window_last_flag,#{E:@catppuccin_window_flags_icon_last},}##{?window_marked_flag,#{E:@catppuccin_window_flags_icon_mark},}##{?window_zoomed_flag,#{E:@catppuccin_window_flags_icon_zoom},} "
-
-# Status line options
-set -g @catppuccin_status_left_separator ""
-set -g @catppuccin_status_middle_separator ""
-set -g @catppuccin_status_right_separator "█"
-set -g @catppuccin_status_connect_separator "yes" # yes, no
-set -g @catppuccin_status_fill "icon"
-set -g @catppuccin_status_module_bg_color "#{@thm_surface_0}"
+set -g @theme_status_left_separator ""
+set -g @theme_status_middle_separator ""
+set -g @theme_status_right_separator " "
+set -g @theme_status_connect_separator "yes"
+set -g @theme_status_module_text_bg "#{@thm_surface_0}"
 ```
