@@ -10,3 +10,5 @@ print_option @theme
 print_option @theme_switch_key
 print_option @theme_menu_selected_style
 print_option @theme_pane_active_border_style
+printf "\npersisted-theme "
+sed -n '1p' "${HOME}/.config/tmux/theme/current_theme.conf"

@@ -40,6 +40,8 @@ git clone <repo-url> ~/.config/tmux/plugins/tmux-theme
 把下面的配置加到 `~/.tmux.conf`：
 
 ```bash
+source-file -q ~/.config/tmux/theme/current_theme.conf
+
 set -g @theme "everforest"
 set -g @theme_switch_key "T"
 run ~/.config/tmux/plugins/tmux-theme/theme.tmux
@@ -48,6 +50,8 @@ run ~/.config/tmux/plugins/tmux-theme/theme.tmux
 ### 使用 TPM
 
 ```bash
+source-file -q ~/.config/tmux/theme/current_theme.conf
+
 set -g @plugin '<your-user>/tmux-theme'
 set -g @plugin 'tmux-plugins/tpm'
 
@@ -80,7 +84,8 @@ set -g @theme_switch_key "T"
 ```
 
 如果你不想要这个快捷键，把它设为空字符串就行。
-通过菜单切换后的主题会持久化到 `~/.config/tmux/theme/current_theme.conf`，所以 reload tmux 配置后不会又傻乎乎跳回默认主题。
+通过菜单切换后的主题会以 tmux 配置片段的形式写入 `~/.config/tmux/theme/current_theme.conf`；如果 tmux 正在运行，切换脚本还会自动 reload 你的 tmux 配置。
+如果这个文件还不存在，`theme.tmux` 会在首次加载时自动创建，主题值优先使用你配置的 `@theme`，否则回退到默认主题。
 
 ## 配置示例
 

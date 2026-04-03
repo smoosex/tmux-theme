@@ -10,6 +10,8 @@ git clone <repo-url> ~/.config/tmux/plugins/tmux-theme
 ## 2. Load it from `~/.tmux.conf`
 
 ```bash
+source-file -q ~/.config/tmux/theme/current_theme.conf
+
 set -g @theme "everforest"
 set -g @theme_switch_key "T"
 
@@ -19,7 +21,8 @@ run ~/.config/tmux/plugins/tmux-theme/theme.tmux
 Restart tmux or run `tmux source ~/.tmux.conf`.
 
 Press `prefix + T` to open the theme switcher menu. Set `@theme_switch_key` to `""` if you want to disable it.
-The menu stores the last selected theme in `~/.config/tmux/theme/current_theme.conf`, so reloading tmux keeps your choice.
+The menu stores the last selected theme in `~/.config/tmux/theme/current_theme.conf` as a tmux config snippet, and reloads your tmux config automatically when tmux is running.
+If the file does not exist yet, `theme.tmux` creates it on first load.
 
 ## 3. Pick a different built-in theme
 

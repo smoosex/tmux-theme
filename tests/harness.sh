@@ -46,6 +46,9 @@ msg_verbose() {
 
 SOCKET_NAME="${SOCKET_NAME:-test}"
 SESSION_NAME="test-session"
+ORIGINAL_HOME="${HOME}"
+TEST_HOME="$(mktemp -d)"
+export HOME="${TEST_HOME}"
 
 tmux() {
   command tmux -L "$SOCKET_NAME" -f /dev/null "$@"
@@ -53,7 +56,11 @@ tmux() {
 
 start_tmux_server() {
   msg_verbose "${CYAN}Starting tmux server on socket ${SOCKET_NAME}${NOFORMAT}"
-  tmux new -s "$SESSION_NAME" -d "$(which bash)"
+  tmux kill-server 2>/dev/null || true
+  tmux new -s "$SESSION_NAME" -d "sleep 3600"
+  until tmux has-session -t "$SESSION_NAME" 2>/dev/null; do
+    sleep 0.05
+  done
 }
 
 kill_tmux_server() {
@@ -70,6 +77,9 @@ cleanup() {
   if test $? -eq 0; then
     kill_tmux_server
   fi
+
+  rm -rf "${TEST_HOME}"
+  export HOME="${ORIGINAL_HOME}"
 }
 
 die() {

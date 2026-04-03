@@ -40,6 +40,8 @@ git clone <repo-url> ~/.config/tmux/plugins/tmux-theme
 Add this to `~/.tmux.conf`:
 
 ```bash
+source-file -q ~/.config/tmux/theme/current_theme.conf
+
 set -g @theme "everforest"
 set -g @theme_switch_key "T"
 run ~/.config/tmux/plugins/tmux-theme/theme.tmux
@@ -48,6 +50,8 @@ run ~/.config/tmux/plugins/tmux-theme/theme.tmux
 ### TPM
 
 ```bash
+source-file -q ~/.config/tmux/theme/current_theme.conf
+
 set -g @plugin '<your-user>/tmux-theme'
 set -g @plugin 'tmux-plugins/tpm'
 
@@ -80,7 +84,8 @@ set -g @theme_switch_key "T"
 ```
 
 Set it to an empty string if you want to disable the binding.
-The selected theme is persisted to `~/.config/tmux/theme/current_theme.conf`, so reloading tmux will keep the last theme you picked from the menu.
+The selected theme is persisted to `~/.config/tmux/theme/current_theme.conf` as a tmux config snippet, and the switch script reloads your tmux config automatically when tmux is running.
+If the file does not exist yet, `theme.tmux` creates it on first load using the configured theme or the default fallback theme.
 
 ## Example configuration
 

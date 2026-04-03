@@ -5,10 +5,11 @@ tmux-theme: switched to 'rosepine'
 everforest built-in
 one_light built-in
 rosepine local
-persisted-theme rosepine
+persisted-theme set -g @theme 'rosepine'
 @theme rosepine
 @_theme_name rosepine
 @thm_bg #010203
-@theme everforest
+@theme rosepine
 @_theme_name rosepine
 @thm_bg #010203
+persisted-theme-no-server set -g @theme 'one_light'

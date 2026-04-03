@@ -5,7 +5,6 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 DEFAULT_THEME="everforest"
-PERSISTED_THEME_FILE="${HOME}/.config/tmux/theme/current_theme.conf"
 
 tmux_cmd() {
   if [[ -n "${TMUX_THEME_SOCKET_NAME:-}" ]]; then
@@ -14,6 +13,44 @@ tmux_cmd() {
   fi
 
   command tmux "$@"
+}
+
+default_persisted_theme_file() {
+  printf '%s\n' "${HOME}/.config/tmux/theme/current_theme.conf"
+}
+
+default_reload_config_file() {
+  printf '%s\n' "${HOME}/.config/tmux/tmux.conf"
+}
+
+tmux_running() {
+  tmux_cmd list-sessions >/dev/null 2>&1
+}
+
+persisted_theme_file() {
+  local file
+
+  if tmux_running; then
+    file="$(tmux_cmd show-options -gqv "@theme_persisted_file")"
+  fi
+  if [[ -z "${file:-}" ]]; then
+    file="$(default_persisted_theme_file)"
+  fi
+
+  printf '%s\n' "${file}"
+}
+
+reload_config_file() {
+  local file
+
+  if tmux_running; then
+    file="$(tmux_cmd show-options -gqv "@theme_reload_config_file")"
+  fi
+  if [[ -z "${file:-}" ]]; then
+    file="$(default_reload_config_file)"
+  fi
+
+  printf '%s\n' "${file}"
 }
 
 theme_records() {
@@ -40,9 +77,17 @@ theme_records() {
 current_theme() {
   local name
 
-  name="$(tmux_cmd show-options -gqv "@_theme_name")"
-  if [[ -z "${name}" ]]; then
-    name="$(tmux_cmd show-options -gqv "@theme")"
+  if tmux_running; then
+    name="$(tmux_cmd show-options -gqv "@_theme_name")"
+    if [[ -z "${name}" ]]; then
+      name="$(tmux_cmd show-options -gqv "@theme")"
+    fi
+  fi
+  if [[ -z "${name:-}" ]]; then
+    name="$(sed -n "s/^set -g @theme ['\"]\\([^'\"]*\\)['\"]$/\\1/p" "$(persisted_theme_file)" 2>/dev/null | head -n 1)"
+  fi
+  if [[ -z "${name:-}" ]]; then
+    name="$(sed -n '1p' "$(persisted_theme_file)" 2>/dev/null | tr -d '\r')"
   fi
   if [[ -z "${name}" ]]; then
     name="${DEFAULT_THEME}"
@@ -56,12 +101,24 @@ list_themes() {
 }
 
 persist_theme() {
-  local theme_name persisted_dir
+  local theme_name persisted_dir persisted_file
 
   theme_name="${1:?missing theme name}"
-  persisted_dir="$(dirname "${PERSISTED_THEME_FILE}")"
+  persisted_file="$(persisted_theme_file)"
+  persisted_dir="$(dirname "${persisted_file}")"
   mkdir -p "${persisted_dir}"
-  printf '%s\n' "${theme_name}" > "${PERSISTED_THEME_FILE}"
+  printf "set -g @theme '%s'\n" "${theme_name}" > "${persisted_file}"
+}
+
+reload_tmux_config() {
+  local config_file
+
+  if ! tmux_running; then
+    return
+  fi
+
+  config_file="$(reload_config_file)"
+  tmux_cmd source-file "${config_file}"
 }
 
 popup_text() {
@@ -88,8 +145,7 @@ switch_theme() {
 
   theme_name="${1:?missing theme name}"
   persist_theme "${theme_name}"
-  tmux_cmd set -gq @theme "${theme_name}"
-  TMUX_THEME_SOCKET_NAME="${TMUX_THEME_SOCKET_NAME:-}" "${PLUGIN_DIR}/theme.tmux"
+  reload_tmux_config
   show_popup "$(popup_text "tmux-theme: switched to '${theme_name}'")"
 }
 

@@ -6,9 +6,11 @@
 | --- | --- |
 | `@theme` | Selects the active theme. Built-ins include `catppuccin-latte`, `catppuccin-frappe`, `catppuccin-macchiato`, `catppuccin-mocha`, `bearded-arc`, `everforest`, `everforest_light`, `gruvchad`, `one_light`, `rosepine`, and `tundra`. |
 | `@theme_switch_key` | Prefix key used to open the theme switcher menu. Set it to `""` to disable the binding. |
+| `@theme_persisted_file` | File that stores the persisted `set -g @theme ...` snippet. |
+| `@theme_reload_config_file` | Tmux config file reloaded after switching themes. |
 
 External themes live in `~/.config/tmux/theme/<name>.conf`. External files win over built-ins with the same name.
-The theme switcher persists the last selected theme in `~/.config/tmux/theme/current_theme.conf`; that file is read before `@theme` on startup.
+The theme switcher persists the last selected theme in `~/.config/tmux/theme/current_theme.conf` as a tmux config snippet; that file is sourced before `@theme` is resolved on startup.
 
 ### Status line
 
